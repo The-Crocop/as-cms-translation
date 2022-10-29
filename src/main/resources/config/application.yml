@@ -231,3 +231,5 @@ jhipster:
 # ===================================================================
 
 # application:
+google:
+  project-id: citizenjournalist-326619

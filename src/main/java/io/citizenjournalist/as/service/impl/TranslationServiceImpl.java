@@ -1,5 +1,8 @@
 package io.citizenjournalist.as.service.impl;
 
+import com.google.cloud.translate.v3beta1.LocationName;
+import com.google.cloud.translate.v3beta1.TranslateTextRequest;
+import com.google.cloud.translate.v3beta1.TranslationServiceClient;
 import io.citizenjournalist.as.domain.Translation;
 import io.citizenjournalist.as.repository.TranslationRepository;
 import io.citizenjournalist.as.service.TranslationService;
@@ -7,11 +10,13 @@ import io.citizenjournalist.as.service.dto.TranslationDTO;
 import io.citizenjournalist.as.service.mapper.TranslationMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 /**
  * Service Implementation for managing {@link Translation}.
@@ -26,15 +31,42 @@ public class TranslationServiceImpl implements TranslationService {
 
     private final TranslationMapper translationMapper;
 
-    public TranslationServiceImpl(TranslationRepository translationRepository, TranslationMapper translationMapper) {
+    private final TranslationServiceClient translationServiceClient;
+
+    private final LocationName parent;
+
+    public TranslationServiceImpl(
+        @Value("${google.project-id}") String projectId,
+        TranslationRepository translationRepository,
+        TranslationMapper translationMapper,
+        TranslationServiceClient translationServiceClient
+    ) {
         this.translationRepository = translationRepository;
         this.translationMapper = translationMapper;
+        this.translationServiceClient = translationServiceClient;
+        this.parent = LocationName.of(projectId, "global");
     }
 
     @Override
     public Mono<TranslationDTO> save(TranslationDTO translationDTO) {
         log.debug("Request to save Translation : {}", translationDTO);
-        return translationRepository.save(translationMapper.toEntity(translationDTO)).map(translationMapper::toDto);
+
+        var request = TranslateTextRequest
+            .newBuilder()
+            .setParent(parent.toString())
+            .setMimeType("text/plain")
+            .setTargetLanguageCode(translationDTO.getLanguage().getShortName())
+            .addContents(translationDTO.getInputText())
+            .build();
+        return Mono
+            .fromCallable(() -> translationServiceClient.translateText(request))
+            .subscribeOn(Schedulers.boundedElastic())
+            .flatMap(translateTextResponse -> {
+                var translation = translateTextResponse.getTranslations(0);
+                translationDTO.setDetectedLanguage(translation.getDetectedLanguageCode());
+                translationDTO.setOutputText(translation.getTranslatedText());
+                return translationRepository.save(translationMapper.toEntity(translationDTO)).map(translationMapper::toDto);
+            });
     }
 
     @Override

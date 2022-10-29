@@ -9,7 +9,7 @@
     "clientFramework": "no",
     "creationTimestamp": 1667036297405,
     "databaseType": "sql",
-    "devDatabaseType": "h2Disk",
+    "devDatabaseType": "h2Memory",
     "dtoSuffix": "DTO",
     "enableGradleEnterprise": false,
     "enableHibernateCache": false,
