@@ -167,6 +167,8 @@ dependencies {
     implementation group: "tech.jhipster", name: "jhipster-framework", {
         exclude group: "org.springframework", module: "spring-webmvc"
     }
+    implementation(platform("com.google.cloud:libraries-bom:25.4.0"))
+    implementation("com.google.cloud:google-cloud-translate")
     implementation "javax.annotation:javax.annotation-api"
     implementation "com.fasterxml.jackson.module:jackson-module-jaxb-annotations"
     implementation "commons-beanutils:commons-beanutils:${commonsBeanutilsVersion}"

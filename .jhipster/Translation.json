@@ -1,0 +1,45 @@
+{
+  "applications": "*",
+  "changelogDate": "20221029165503",
+  "clientRootFolder": "AsCmsTranslation",
+  "databaseType": "sql",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "translation",
+  "fields": [
+    {
+      "fieldName": "inputText",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "language",
+      "fieldType": "Language",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ENGLISH,GERMAN,FRENCH,ITALIAN,SPANISH,CATALAN,UKRAINIAN,PORTUGUESE,JAPANESE,ARABIC,CHINESE,RUSSIAN"
+    },
+    {
+      "fieldName": "persist",
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "detectedLanguage",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "outputText",
+      "fieldType": "byte[]",
+      "fieldTypeBlobContent": "text"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "microserviceName": "AsCmsTranslation",
+  "name": "Translation",
+  "pagination": "infinite-scroll",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}

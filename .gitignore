@@ -156,3 +156,5 @@ Desktop.ini
 ######################
 /coverage/
 /.nyc_output/
+/src/main/resources/citizenjournalist-326619-b7ab6d3e0e4e.json
+/.okta.env

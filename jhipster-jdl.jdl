@@ -1,0 +1,15 @@
+entity Translation {
+ inputText TextBlob required
+ language Language required
+ persist Boolean required
+ detectedLanguage String
+ outputText TextBlob
+}
+
+enum Language {
+ ENGLISH, GERMAN, FRENCH, ITALIAN, SPANISH, CATALAN, UKRAINIAN, PORTUGUESE, JAPANESE, ARABIC, CHINESE, RUSSIAN
+}
+
+service Translation with serviceImpl
+paginate Translation with infinite-scroll
+dto Translation with mapstruct
