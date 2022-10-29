@@ -65,7 +65,11 @@ public class TranslationServiceImpl implements TranslationService {
                 var translation = translateTextResponse.getTranslations(0);
                 translationDTO.setDetectedLanguage(translation.getDetectedLanguageCode());
                 translationDTO.setOutputText(translation.getTranslatedText());
-                return translationRepository.save(translationMapper.toEntity(translationDTO)).map(translationMapper::toDto);
+                if (!translationDTO.getPersist()) {
+                    return Mono.just(translationDTO);
+                } else {
+                    return translationRepository.save(translationMapper.toEntity(translationDTO)).map(translationMapper::toDto);
+                }
             });
     }
 

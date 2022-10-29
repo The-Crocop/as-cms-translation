@@ -10,8 +10,8 @@
 
 spring:
   r2dbc:
-    url: r2dbc:h2:file://././build/h2db/testdb/ascmstranslation;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    url: r2dbc:h2:mem:///ascmstranslation:12344;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY
     username: ascmstranslation
     password:
   liquibase:
-    url: jdbc:h2:file:./build/h2db/testdb/ascmstranslation;DB_CLOSE_DELAY=-1;MODE=LEGACY
+    url: jdbc:h2:mem:ascmstranslation:12344;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=LEGACY

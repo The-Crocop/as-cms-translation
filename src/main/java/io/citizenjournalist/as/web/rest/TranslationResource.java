@@ -75,7 +75,14 @@ public class TranslationResource {
                 try {
                     return ResponseEntity
                         .created(new URI("/api/translations/" + result.getId()))
-                        .headers(HeaderUtil.createEntityCreationAlert(applicationName, false, ENTITY_NAME, result.getId().toString()))
+                        .headers(
+                            HeaderUtil.createEntityCreationAlert(
+                                applicationName,
+                                false,
+                                ENTITY_NAME,
+                                result.getId() != null ? result.getId().toString() : "-1"
+                            )
+                        )
                         .body(result);
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
